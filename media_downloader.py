@@ -455,6 +455,9 @@ async def download_media(
                 _check_download_finish(media_size, temp_download_path, ui_file_name)
                 await asyncio.sleep(0.5)
                 _move_to_download_path(temp_download_path, file_name)
+                if message.caption:
+                    with open(file_name[:-3] + "txt", 'w', encoding='utf-8') as file:
+                        file.write(message.caption)
                 # TODO: if not exist file size or media
                 return DownloadStatus.SuccessDownload, file_name
         except pyrogram.errors.exceptions.bad_request_400.BadRequest:
