@@ -383,7 +383,7 @@ class Application:
         self.restart_program = False
         self.config: dict = {}
         self.app_data: dict = {}
-        self.file_path_prefix: List[str] = ["chat_title", "media_datetime"]
+        self.file_path_prefix: List[str] = ["chat_title_id", "media_type"]
         self.file_name_prefix: List[str] = ["message_id", "file_name"]
         self.file_name_prefix_split: str = " - "
         self.log_file_path = os.path.join(os.path.abspath("."), "log")
@@ -691,7 +691,7 @@ class Application:
         return ret
 
     def get_file_save_path(
-        self, media_type: str, chat_title: str, media_datetime: str
+        self, media_type: str, chat_title: str, media_datetime: str, topic_id: str, chat_title_id: str
     ) -> str:
         """Get file save path prefix.
 
@@ -706,6 +706,12 @@ class Application:
         media_datetime: str
             media datetime
 
+        topic_id: str
+            topic id
+
+        chat_title_id: str
+            see channel or group title with id
+
         Returns
         -------
         str
@@ -716,6 +722,10 @@ class Application:
         for prefix in self.file_path_prefix:
             if prefix == "chat_title":
                 res = os.path.join(res, chat_title)
+            elif prefix == "chat_title_id":
+                res = os.path.join(res, chat_title_id)
+            elif prefix == "topic_id":
+                res = os.path.join(res, topic_id)
             elif prefix == "media_datetime":
                 res = os.path.join(res, media_datetime)
             elif prefix == "media_type":

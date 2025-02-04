@@ -5,6 +5,7 @@ import os
 import shutil
 import time
 from typing import List, Optional, Tuple, Union
+from webbrowser import get
 
 import pyrogram
 from loguru import logger
@@ -191,18 +192,28 @@ async def _get_media_meta(
     file_name = None
     temp_file_name = None
     dirname = validate_title(f"{chat_id}")
+    dirname_with_id = validate_title(f"{chat_id}")
     if message.chat and message.chat.title:
         dirname = validate_title(f"{message.chat.title}")
+        dirname_with_id = validate_title(f"{message.chat.title}") + " " + validate_title(f"{chat_id}")
 
     if message.date:
         datetime_dir_name = message.date.strftime(app.date_format)
     else:
         datetime_dir_name = "0"
 
+    reply_to = getattr(message, "reply_to_top_message_id", None)
+    if not reply_to:
+        reply_to = getattr(message, "reply_to_message_id", None)
+    if not reply_to:
+        reply_to = "0"
+    else:
+        reply_to = validate_title(f"{reply_to}")
+
     if _type in ["voice", "video_note"]:
         # pylint: disable = C0209
         file_format = media_obj.mime_type.split("/")[-1]  # type: ignore
-        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name)
+        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name, reply_to, dirname_with_id)
         file_name = "{} - {}_{}.{}".format(
             message.id,
             _type,
@@ -247,7 +258,7 @@ async def _get_media_meta(
             app.get_file_name(message.id, file_name, caption) + file_name_suffix
         )
 
-        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name)
+        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name, reply_to, dirname_with_id)
 
         temp_file_name = os.path.join(app.temp_save_path, dirname, gen_file_name)
 
@@ -276,8 +287,18 @@ async def save_msg_to_file(
         message.chat.title if message.chat and message.chat.title else str(chat_id)
     )
     datetime_dir_name = message.date.strftime(app.date_format) if message.date else "0"
+    dirname_with_id = validate_title(
+        message.chat.title + " " + str(chat_id) if message.chat and message.chat.title else str(chat_id)
+    )
+    reply_to = getattr(message, "reply_to_top_message_id", None)
+    if not reply_to:
+        reply_to = getattr(message, "reply_to_message_id", None)
+    if not reply_to:
+        reply_to = "0"
+    else:
+        reply_to = str(reply_to)
 
-    file_save_path = app.get_file_save_path("msg", dirname, datetime_dir_name)
+    file_save_path = app.get_file_save_path("msg", dirname, datetime_dir_name, reply_to, dirname_with_id)
     file_name = os.path.join(
         app.temp_save_path,
         file_save_path,
