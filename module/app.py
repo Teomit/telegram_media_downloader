@@ -691,7 +691,7 @@ class Application:
         return ret
 
     def get_file_save_path(
-        self, media_type: str, chat_title: str, media_datetime: str, topic_id: str, chat_title_id: str
+        self, media_type: str, chat_title: str, media_datetime: str, topic: str, chat_title_id: str
     ) -> str:
         """Get file save path prefix.
 
@@ -706,7 +706,7 @@ class Application:
         media_datetime: str
             media datetime
 
-        topic_id: str
+        topic: str
             topic id
 
         chat_title_id: str
@@ -724,8 +724,8 @@ class Application:
                 res = os.path.join(res, chat_title)
             elif prefix == "chat_title_id":
                 res = os.path.join(res, chat_title_id)
-            elif prefix == "topic_id":
-                res = os.path.join(res, topic_id)
+            elif prefix == "topic":
+                res = os.path.join(res, topic)
             elif prefix == "media_datetime":
                 res = os.path.join(res, media_datetime)
             elif prefix == "media_type":
