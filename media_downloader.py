@@ -5,7 +5,6 @@ import os
 import shutil
 import time
 from typing import List, Optional, Tuple, Union
-from webbrowser import get
 
 import pyrogram
 from loguru import logger
@@ -428,7 +427,7 @@ async def download_media(
             if _can_download(_type, file_formats, file_format):
                 if _is_exist(file_name):
                     file_size = os.path.getsize(file_name)
-                    if file_size or file_size == media_size:
+                    if file_size and file_size == media_size:
                         logger.info(
                             f"id={message.id} {ui_file_name} "
                             f"{_t('already download,download skipped')}.\n"
