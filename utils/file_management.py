@@ -69,9 +69,11 @@ def manage_duplicate_file(file_path: str):
     )
     if file_path in old_files:
         old_files.remove(file_path)
-    current_file_md5: str = md5(open(file_path, "rb").read()).hexdigest()
+    with open(file_path, "rb") as f:
+        current_file_md5: str = md5(f.read()).hexdigest()
     for old_file_path in old_files:
-        old_file_md5: str = md5(open(old_file_path, "rb").read()).hexdigest()
+        with open(old_file_path, "rb") as f:
+            old_file_md5: str = md5(f.read()).hexdigest()
         if current_file_md5 == old_file_md5:
             os.remove(file_path)
             return old_file_path

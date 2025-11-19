@@ -132,9 +132,7 @@ def get_extension(file_id: str, mime_type: str) -> str:
     """Get extension"""
 
     if not file_id:
-        if dot:
-            return ".unknown"
-        return "unknown"
+        return ".unknown"
 
     file_type = _get_file_type(file_id)
 
@@ -615,6 +613,8 @@ async def forward_multi_media(
 
     media_obj = get_media_obj(message, file_name, caption)
     if not node.has_protected_content:
+        if not message.media:
+            return ForwardStatus.SkipForward
         media = getattr(message, message.media.value)
         if not media:
             return ForwardStatus.SkipForward
