@@ -1,0 +1,40 @@
+api_hash: API_HASH
+api_id: API_ID
+chat:
+#Bruce
+# TG Group
+#- chat_id: -100XXXXXXXXXX
+#  last_read_message_id: 0
+# TG channel
+- chat_id: -100XXXXXXXXXX
+  last_read_message_id: 0
+file_formats:
+  audio:
+  - all
+  document:
+  - all
+  video:
+  - all
+file_path_prefix:
+- chat_title_id
+- topic_id
+#- media_type
+file_name_prefix:
+- message_id
+- file_name
+media_types:
+- animation
+- audio
+- photo
+- video
+- document
+- voice
+- video_note
+max_concurrent_transmissions: 3
+max_download_task: 1
+save_path: c:\Users\User\Downloads\
+web_host: 127.0.0.1
+web_port: 5021
+disable_syslog: []
+language: EN
+enable_download_txt: true
